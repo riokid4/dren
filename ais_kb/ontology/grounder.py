@@ -105,3 +105,29 @@ class OntologyGrounder:
             component_id=component_id,
             state_modifier=state_modifier,
         )
+
+from typing import Optional, List
+from ais_kb.ontology.disambiguator import AdeftDisambiguator, DisambResult
+
+class ProductionGrounder(OntologyGrounder):
+    def __init__(self, ontology=None, disambiguator: Optional[AdeftDisambiguator] = None):
+        super().__init__(ontology)
+        self.disambiguator = disambiguator
+
+    def ground_with_disambiguation(self, raw_text: str, context_sentences: List[str]) -> List:
+        base_matches = self.ground(raw_text)
+        if self.disambiguator and len(context_sentences) > 0:
+            combined_text = " ".join(context_sentences + [raw_text])
+            disamb_results = self.disambiguator.disambiguate(combined_text)
+            for dr in disamb_results:
+                if isinstance(dr, DisambResult) and dr.decision:
+                    for m in base_matches:
+                        if m.canonical_id == dr.decision:
+                            m.score = max(m.score, dr.predicted_probs.get(dr.decision, 0.8) * 0.95 + 0.05)
+        for m in base_matches:
+            if raw_text.lower() == m.matched_term.lower():
+                m.score = min(1.0, m.score + 0.05)
+            if "-" in raw_text or "_" in raw_text:
+                m.score = min(1.0, m.score + 0.02)
+            m.score = round(min(1.0, m.score), 4)
+        return sorted(base_matches, key=lambda x: x.score, reverse=True)

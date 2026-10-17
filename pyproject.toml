@@ -13,7 +13,13 @@ dependencies = [
     "numpy>=1.24",
     "scikit-learn>=1.3",
     "pyyaml>=6.0",
+    "duckdb>=0.9",
+    "fastapi>=0.100",
+    "click>=8.0",
 ]
+
+[project.scripts]
+ais-kb = "ais_kb.cli:cli"
 
 [tool.hatch.build.targets.wheel]
 packages = ["ais_kb"]
