@@ -1,0 +1,118 @@
+# Hierarchical AI Safety & Mechanistic Interpretability Ontology
+# Format: node -> parent mapping with synonyms and optional partof relations
+branches:
+  neural_component:
+    root: neural_component
+    nodes:
+      model_layer:
+        parent: neural_component
+        synonyms: ["layer", "transformer_block", "residual_stream_layer"]
+      attention_layer:
+        parent: model_layer
+        synonyms: ["attention_block", "attn_layer", "multi_head_attention"]
+      attention_head:
+        parent: attention_layer
+        synonyms: ["attn_head", "attention_unit", "head"]
+      induction_head:
+        parent: attention_head
+        synonyms: ["induction_heads", "prefix_matching_head"]
+      safety_routing_head:
+        parent: attention_head
+        synonyms: ["refusal_head", "harm_detection_head"]
+      mlp_layer:
+        parent: model_layer
+        synonyms: ["ffn", "feed_forward_network", "mlp_block"]
+      feature_neuron:
+        parent: model_layer
+        synonyms: ["feature", "neuron", "direction", "sae_latent", "sparse_autoencoder_feature"]
+      refusal_direction:
+        parent: feature_neuron
+        synonyms: ["refusal_feature", "harm_refusal_latent", "refusal_mediating_direction"]
+      sycophancy_direction:
+        parent: feature_neuron
+        synonyms: ["sycophancy_feature", "user_agreement_latent"]
+
+  model_intervention:
+    root: model_intervention
+    nodes:
+      post_training_alignment:
+        parent: model_intervention
+        synonyms: ["alignment_tuning", "post_training"]
+      rlhf:
+        parent: post_training_alignment
+        synonyms: ["ppo_alignment", "reinforcement_learning_from_human_feedback"]
+      dpo:
+        parent: post_training_alignment
+        synonyms: ["direct_preference_optimization"]
+      mechanistic_intervention:
+        parent: model_intervention
+        synonyms: ["circuit_intervention", "internal_edit"]
+      ablation:
+        parent: mechanistic_intervention
+        synonyms: ["ablate", "removal", "knockout", "zero_ablation", "directional_ablation"]
+      activation_patching:
+        parent: mechanistic_intervention
+        synonyms: ["patching", "activation_intervention", "resample_patching", "path_patching"]
+      steering:
+        parent: mechanistic_intervention
+        synonyms: ["steering_vector", "feature_steer", "activation_steering", "caa", "contrastive_activation_addition"]
+      quantization:
+        parent: model_intervention
+        synonyms: ["int4_quantization", "awq", "gptq", "4bit_quantization"]
+
+  adversarial_stimulus:
+    root: adversarial_stimulus
+    nodes:
+      jailbreak_prompt:
+        parent: adversarial_stimulus
+        synonyms: ["jailbreak", "red_team_prompt", "adversarial_attack"]
+      gcg_suffix:
+        parent: jailbreak_prompt
+        synonyms: ["gcg", "greedy_coordinate_gradient", "adversarial_suffix"]
+      multi_turn_jailbreak:
+        parent: jailbreak_prompt
+        synonyms: ["crescendo_attack", "multi_turn_escalation", "many_shot_jailbreak"]
+      encoded_cipher:
+        parent: jailbreak_prompt
+        synonyms: ["cipher", "encoded_input", "base64_jailbreak"]
+
+  model_behavior:
+    root: model_behavior
+    nodes:
+      safety_behavior:
+        parent: model_behavior
+        synonyms: ["protective_behavior", "aligned_behavior"]
+      refusal:
+        parent: safety_behavior
+        synonyms: ["rejection", "decline", "block", "harm_refusal", "safety_refusal"]
+      over_refusal:
+        parent: safety_behavior
+        synonyms: ["false_positive_refusal", "exaggerated_safety"]
+      adversarial_behavior:
+        parent: model_behavior
+        synonyms: ["failure_mode", "misaligned_behavior", "safety_failure"]
+      deception:
+        parent: adversarial_behavior
+        synonyms: ["strategic_deception", "alignment_faking", "scheming", "sandbagging"]
+      sycophancy:
+        parent: adversarial_behavior
+        synonyms: ["user_agreement_bias", "opinion_matching", "flattery_bias"]
+      jailbreak_compliance:
+        parent: adversarial_behavior
+        synonyms: ["safety_guardrail_bypass", "unsafe_completion", "asr_increase"]
+      hallucination:
+        parent: adversarial_behavior
+        synonyms: ["fabrication", "confabulation"]
+
+  mechanistic_assay:
+    root: mechanistic_assay
+    nodes:
+      causal_intervention:
+        parent: mechanistic_assay
+        synonyms: ["intervention", "causal_exp", "ablation_assay", "patching_assay"]
+      attribution_assay:
+        parent: mechanistic_assay
+        synonyms: ["integrated_gradients", "attribution_patching", "shap"]
+      correlational_probe:
+        parent: mechanistic_assay
+        synonyms: ["probe", "correlation", "linear_probe", "logit_lens", "ccs"]
